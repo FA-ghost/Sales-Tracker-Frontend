@@ -69,7 +69,7 @@ function Home(){
                     <div className="flex flex-col gap-[15px] h-full">
                         {/* Stats Cards */}
                         <div className="flex justify-between text-white gap-[15px]">
-                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
+                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80 min-h-[120px]">
                                 <div className="flex justify-between items-center">
                                     <span className="font-semibold">Total revenue</span>
                                     <div className="bg-[#6366F1] p-[5px] rounded-md ">
@@ -97,7 +97,6 @@ function Home(){
                                     </div>
                                 </div>
                                 <span className="font-semibold text-[20px]">20000</span>
-                                <span>30000</span>
                             </div>
                             <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
                                 <div className="flex justify-between items-center">
@@ -107,7 +106,6 @@ function Home(){
                                     </div>
                                 </div>
                                 <span className="font-semibold text-[20px]">200000</span>
-                                <span>200000</span>
                             </div>
                         </div>
                         
