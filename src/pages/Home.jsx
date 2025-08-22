@@ -111,7 +111,7 @@ function Home(){
                         
                         {/* Revenue Trend Chart */}
                         <div className="flex flex-col gap-[5px] shadow-md p-[15px] rounded-md bg-[#E0E0E6] min-h-[500px]">
-                            <span className="font-semibold">Revenue Trend</span>
+                            <span className="font-semibold">Revenue Over Time</span>
                             <div className="flex-1 min-h-0">
                                 <LineGraph key={`line-${chartKey}`} data={dummyData2} />
                             </div>
@@ -120,7 +120,7 @@ function Home(){
                         {/* Bottom Charts - Side by Side */}
                         <div className="flex gap-[15px] min-h-[400px]">
                             <div className="flex flex-col gap-[5px] flex-1 p-[15px] rounded-md bg-[#E0E0E6] min-h-0">
-                                <span className="font-semibold">Revenue vs Orders</span>
+                                <span className="font-semibold">Revenue & Orders by Year</span>
                                 <div className="flex-1 min-h-0">
                                     <BarGraph key={`bar1-${chartKey}`} data={dummyData} />
                                 </div>
