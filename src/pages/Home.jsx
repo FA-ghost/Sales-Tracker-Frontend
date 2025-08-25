@@ -9,7 +9,13 @@ import { Banknote, Package2, ShoppingCart, TriangleAlert } from "lucide-react";
 
 function Home(){
     const [isOpen, setIsOpen] = useState(true);
+    const [statData, setStatData] = useState(null)
+    const [revenueOverTime, setRevenueOverTime] = useState(null)
+    const [revenueGrowth, setRevenueGrowth] = useState(null)
+    const [revenueGrowthByYear, setRevenueGrowthByYear] = useState(null)
     const [chartKey, setChartKey] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const updateIsOpen = () => {
         setIsOpen(!isOpen);
@@ -19,39 +25,146 @@ function Home(){
         }, 350); // Match the transition duration
     };
 
-    const dummyData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-        datasets: [
-        {
-            label:'Sales',
-            data: [6, 16, 12, 15, 11],
-            backgroundColor: "rgba(141,110,235,0.8)",
-        },
-        {
-            label:'Price',
-            data: [6, 16, 12, 15, 11],
-            backgroundColor: "rgba(239, 131, 245,0.8)",
-        }
-    ]
-    };
-    const dummyData2 = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-        datasets: [
-        {
-            label:'Sales',
-            data: [6, 16, 12, 15, 11],
-            backgroundColor: "rgba(141,110,235,0.8)",
-            fill: true
-        },
-        {
-            label:'Price',
-            data: [9, 26, 42, 5, 1],
-            backgroundColor: "rgba(239, 131, 245,0.8)",
-            fill:true 
-        }
-    ]
-    };
 
+    useEffect(() => {
+        const fetchStat = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerHome/recentUpdates")
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json()
+                
+                setStatData(data)
+                
+            } catch (error){
+                console.log(error.message)
+                throw error
+            }
+        }
+        
+        const fetchRevenueOverTime = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerHome/revenueOverTime")
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json()
+                
+                const dataToDisplay = {
+                labels: data.label,
+                datasets: [{
+                    label: data.sales.label,
+                    data: data.sales.data,
+                    backgroundColor: "rgba(141,110,235,0.8)",
+                    fill: true
+                },
+                {
+                    label: data.revenue.label,
+                    data: data.revenue.data,
+                    backgroundColor: "rgba(239, 131, 245,0.8)",
+                    fill:true 
+                }]
+            }
+                setRevenueOverTime(dataToDisplay)
+
+            } catch (error){
+                console.log(error.message)
+                throw error
+            }
+        }
+
+        const fetchGrowth = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerHome/revenueGrowth")
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json()
+                const dataToDisplay = {
+                    labels: data.label,
+                    datasets: [{
+                        label: data.sales.label,
+                        data: data.sales.data,
+                        backgroundColor: "rgba(141,110,235,0.8)",
+                        fill: true
+                    },
+                    {
+                        label: data.revenue.label,
+                        data: data.revenue.data,
+                        backgroundColor: "rgba(239, 131, 245,0.8)",
+                        fill:true 
+                    }]
+                }
+                
+                setRevenueGrowth(dataToDisplay)
+
+            } catch (error){
+                console.log(error.message)
+                throw error
+            }
+        }
+        const fetchGrowthByYear = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerHome/revenueGrowthByYear")
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json()
+                const dataToDisplay = {
+                    labels: data.label,
+                    datasets: [{
+                        label: data.sales.label,
+                        data: data.sales.data,
+                        backgroundColor: "rgba(141,110,235,0.8)",
+                        fill: true
+                    },
+                    {
+                        label: data.revenue.label,
+                        data: data.revenue.data,
+                        backgroundColor: "rgba(239, 131, 245,0.8)",
+                        fill:true 
+                    }]
+                }
+                
+                setRevenueGrowthByYear(dataToDisplay)
+
+            } catch (error){
+                console.log(error.message)
+                throw error
+            }
+        }
+
+        const fetchAllData = async () => {
+            try {
+                setLoading(true);
+                await Promise.all([
+                    fetchStat(),
+                    fetchRevenueOverTime(),
+                    fetchGrowth(),
+                    fetchGrowthByYear()
+                ]);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchAllData();
+    }, [])
+
+    console.log('Render state:', { loading, error, statData, revenueOverTime, revenueGrowth, revenueGrowthByYear });
+    console.log(statData)
+    if (loading) {
+        console.log('Showing loading state');
+        return <div className="p-4">Loading...</div>;
+    }
+    
+    if (error) {
+        console.log('Showing error state:', error);
+        return <div className="p-4 text-red-500">Error: {error}</div>;
+    }
     return (
         <>
             <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen"
@@ -68,7 +181,8 @@ function Home(){
                 <div className="col-start-2 row-start-2 p-[10px] overflow-hidden">
                     <div className="flex flex-col gap-[15px] h-full">
                         {/* Stats Cards */}
-                        <div className="flex justify-between text-white gap-[15px]">
+                        {statData && (
+                            <div className="flex justify-between text-white gap-[15px]">
                             <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80 min-h-[120px]">
                                 <div className="flex justify-between items-center">
                                     <span className="font-semibold">Total revenue</span>
@@ -76,8 +190,8 @@ function Home(){
                                         <Banknote size={30} />
                                     </div> 
                                 </div>
-                                <span className="font-semibold text-[20px]">20000</span>
-                                <span>20000</span>
+                                <span className="font-semibold text-[20px]">{`$ ${Number(statData.currRev).toLocaleString()}`}</span>
+                                <span className={`text-sm mt-1 ${statData.growthAgainstLastRev > 0 ? 'text-green-600' : 'text-red-600'}`}>{statData.growthAgainstLastRev > 0 ? "+" : '' } {`${statData.growthAgainstLastRev}% vs last month`}</span>
                             </div>
                             <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
                                 <div className="flex justify-between items-center">
@@ -86,8 +200,8 @@ function Home(){
                                         <ShoppingCart size={30} />
                                     </div>
                                 </div>
-                                <span className="font-semibold text-[20px]">200000</span>
-                                <span>200000</span>
+                                <span className="font-semibold text-[20px]">{`${Number(statData.currSal).toLocaleString()}`}</span>
+                                <span className={`text-sm mt-1 ${statData.growthAgainstLastSal > 0 ? 'text-green-600' : 'text-red-600'}`}>{statData.growthAgainstLastSal > 0 ? "+" : '' } {`${statData.growthAgainstLastSal}% vs last month`}</span>
                             </div>
                             <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
                                 <div className="flex justify-between items-center">
@@ -96,24 +210,27 @@ function Home(){
                                         <Package2 size={30} />
                                     </div>
                                 </div>
-                                <span className="font-semibold text-[20px]">20000</span>
+                                <span className="font-semibold text-[20px]">{statData.productCount}</span>
                             </div>
                             <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
                                 <div className="flex justify-between items-center">
-                                    <span className="font-semibold">Low Stock Alert </span>
+                                    <span className="font-semibold">Low Stock Alert</span>
                                     <div className="bg-[#EF4444] p-[5px] rounded-md">
                                         <TriangleAlert size={30} />
                                     </div>
                                 </div>
-                                <span className="font-semibold text-[20px]">200000</span>
+                                <span className="font-semibold text-[20px]">{statData.lowStockAmount}</span>
                             </div>
                         </div>
+                        )}
                         
                         {/* Revenue Trend Chart */}
                         <div className="flex flex-col gap-[5px] shadow-md p-[15px] rounded-md bg-[#E0E0E6] min-h-[500px]">
                             <span className="font-semibold">Revenue Over Time</span>
                             <div className="flex-1 min-h-0">
-                                <LineGraph key={`line-${chartKey}`} data={dummyData2} />
+                                {revenueOverTime?.labels?.length > 0 && (
+                                    <LineGraph key={`line-${chartKey}`} data={revenueOverTime} />
+                                )}
                             </div>
                         </div>
                         
@@ -122,13 +239,17 @@ function Home(){
                             <div className="flex flex-col gap-[5px] flex-1 p-[15px] rounded-md bg-[#E0E0E6] min-h-0">
                                 <span className="font-semibold">Revenue & Orders by Year</span>
                                 <div className="flex-1 min-h-0">
-                                    <BarGraph key={`bar1-${chartKey}`} data={dummyData} />
+                                    {revenueGrowthByYear?.labels?.length > 0 && (
+                                        <BarGraph key={`bar1-${chartKey}`} data={revenueGrowthByYear} />
+                                    )}
                                 </div>
                             </div>
                             <div className="flex flex-col gap-[5px] flex-1 p-[15px] rounded-md bg-[#E0E0E6] min-h-0">
                                 <span className="font-semibold">Growth Trend</span>
                                 <div className="flex-1 min-h-0">
-                                    <BarGraph key={`bar2-${chartKey}`} data={dummyData} />
+                                    {revenueGrowth?.labels?.length > 0 && (
+                                        <BarGraph key={`bar2-${chartKey}`} data={revenueGrowth} />
+                                    )}
                                 </div>
                             </div>
                         </div>
