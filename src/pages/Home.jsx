@@ -62,7 +62,7 @@ function Home(){
                 {
                     label: data.revenue.label,
                     data: data.revenue.data,
-                    backgroundColor: "rgba(239, 131, 245,0.8)",
+                    backgroundColor: "rgba(200, 162, 200,0.8)",
                     fill:true 
                 }]
             }
@@ -92,7 +92,7 @@ function Home(){
                     {
                         label: data.revenue.label,
                         data: data.revenue.data,
-                        backgroundColor: "rgba(239, 131, 245,0.8)",
+                        backgroundColor: "rgba(200, 162, 200,0.8)",
                         fill:true 
                     }]
                 }
@@ -122,7 +122,7 @@ function Home(){
                     {
                         label: data.revenue.label,
                         data: data.revenue.data,
-                        backgroundColor: "rgba(239, 131, 245,0.8)",
+                        backgroundColor: "rgba(200, 162, 200,0.8)",
                         fill:true 
                     }]
                 }
