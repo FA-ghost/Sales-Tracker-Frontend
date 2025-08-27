@@ -5,17 +5,21 @@ import Sidebar from "../components/Sidebar.jsx";
 import BarGraph from "../components/BarGraph.jsx";
 import LineGraph from "../components/LineGraph.jsx";
 import Footer from "../components/Footer.jsx";
+import MobileSideBar from "../components/MobileSideBar.jsx";
+import StatCard from "../components/StatCard.jsx";
 import { Banknote, Package2, ShoppingCart, TriangleAlert } from "lucide-react";
+import GraphFormat from "../components/GraphFormat.jsx";
 
 function Home(){
     const [isOpen, setIsOpen] = useState(true);
-    const [statData, setStatData] = useState(null)
-    const [revenueOverTime, setRevenueOverTime] = useState(null)
-    const [revenueGrowth, setRevenueGrowth] = useState(null)
-    const [revenueGrowthByYear, setRevenueGrowthByYear] = useState(null)
+    const [statData, setStatData] = useState(null);
+    const [revenueOverTime, setRevenueOverTime] = useState(null);
+    const [revenueGrowth, setRevenueGrowth] = useState(null);
+    const [revenueGrowthByYear, setRevenueGrowthByYear] = useState(null);
     const [chartKey, setChartKey] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
     const updateIsOpen = () => {
         setIsOpen(!isOpen);
@@ -27,6 +31,8 @@ function Home(){
 
 
     useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
+        window.addEventListener("resize", handleResize)
         const fetchStat = async () =>{
             try{
                 const response = await fetch("/api/v1/managerHome/recentUpdates")
@@ -39,7 +45,7 @@ function Home(){
                 
             } catch (error){
                 console.log(error.message)
-                throw error
+                throw Error(error)
             }
         }
         
@@ -70,7 +76,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw error
+                throw Error(error)
             }
         }
 
@@ -101,7 +107,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw error
+                throw Error(error)
             }
         }
         const fetchGrowthByYear = async () =>{
@@ -131,7 +137,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw error
+                throw Error(error)
             }
         }
 
@@ -152,6 +158,7 @@ function Home(){
         };
     
         fetchAllData();
+        return () => window.removeEventListener("resize", handleResize)
     }, [])
 
     console.log('Render state:', { loading, error, statData, revenueOverTime, revenueGrowth, revenueGrowthByYear });
@@ -168,65 +175,55 @@ function Home(){
     return (
         <>
             <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen"
-            style={{
+            style={isDesktop ? {
                         gridTemplateColumns: isOpen ? "250px 1fr" : "70px 1fr",
+                    } : {
+                        gridTemplateColumns: "1fr",
                     }}
             >
-                <div className="col-start-2 row-start-1">
-                    <Navbar />
+                <div className="col-start-1 flex justify-between items-center p-[10px] lg:col-start-2 row-start-1">
+                    {!isDesktop && (
+                        <div className="">
+                            <MobileSideBar isOpen={isOpen} />
+                        </div>
+                        ) }
+                    <div>
+                        <Navbar />
+                    </div>
+                    
                 </div>
-                <div className="w-full col-start-1 row-start-1 row-span-2">
-                    <Sidebar update={updateIsOpen} isOpen={isOpen} />
-                </div>
-                <div className="col-start-2 row-start-2 p-[10px] overflow-hidden">
+                {isDesktop && 
+                (<div className="w-full col-start-1 row-start-1 row-span-2">
+                     <Sidebar update={updateIsOpen} isOpen={isOpen} />
+                </div>)
+                }
+                <div className=" col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden">
                     <div className="flex flex-col gap-[15px] h-full">
                         {/* Stats Cards */}
                         {statData && (
-                            <div className="flex justify-between text-white gap-[15px]">
-                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80 min-h-[120px]">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-semibold">Total revenue</span>
-                                    <div className="bg-[#6366F1] p-[5px] rounded-md ">
-                                        <Banknote size={30} />
-                                    </div> 
-                                </div>
-                                <span className="font-semibold text-[20px]">{`$ ${Number(statData.currRev).toLocaleString()}`}</span>
-                                <span className={`text-sm mt-1 ${statData.growthAgainstLastRev > 0 ? 'text-green-600' : 'text-red-600'}`}>{statData.growthAgainstLastRev > 0 ? "+" : '' } {`${statData.growthAgainstLastRev}% vs last month`}</span>
-                            </div>
-                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-semibold">Total Orders</span>
-                                    <div className="bg-[#8B5CF6] p-[5px] rounded-md">
-                                        <ShoppingCart size={30} />
-                                    </div>
-                                </div>
-                                <span className="font-semibold text-[20px]">{`${Number(statData.currSal).toLocaleString()}`}</span>
-                                <span className={`text-sm mt-1 ${statData.growthAgainstLastSal > 0 ? 'text-green-600' : 'text-red-600'}`}>{statData.growthAgainstLastSal > 0 ? "+" : '' } {`${statData.growthAgainstLastSal}% vs last month`}</span>
-                            </div>
-                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-semibold">Total Products</span>
-                                    <div className="bg-[#06B6D4] p-[5px] rounded-md">
-                                        <Package2 size={30} />
-                                    </div>
-                                </div>
-                                <span className="font-semibold text-[20px]">{statData.productCount}</span>
-                            </div>
-                            <div className="flex flex-col gap-[5px] flex-1 rounded-md p-[10px] bg-[#3B38A0]/80">
-                                <div className="flex justify-between items-center">
-                                    <span className="font-semibold">Low Stock Alert</span>
-                                    <div className="bg-[#EF4444] p-[5px] rounded-md">
-                                        <TriangleAlert size={30} />
-                                    </div>
-                                </div>
-                                <span className="font-semibold text-[20px]">{statData.lowStockAmount}</span>
-                            </div>
+                            <div className="flex flex-col md:flex-row justify-between text-white gap-[15px]">
+                                <StatCard title={"Total revenue"} icon={<Banknote size={30} />} color={"bg-[#6366F1]"} data={{
+                                    data1: statData.currRev,
+                                    data2: statData.growthAgainstLastRev
+                                }} money={true} />
+                                <StatCard title={"Total Orders"} icon={<ShoppingCart size={30} />} color={"bg-[#8B5CF6]"} data={{
+                                    data1: statData.currSal,
+                                    data2: statData.growthAgainstLastSal
+                                }} money={true} />
+                                
+                                <StatCard title={"Total Products"} icon={<Package2 size={30} />} color={"bg-[#06B6D4]"} data={{
+                                    data1: statData.productCount,
+                                }} money={false} />
+                                
+                                <StatCard title={"Low Stock Alert"} icon={<TriangleAlert size={30} />} color={"bg-[#EF4444]"} data={{
+                                    data1: statData.lowStockAmount,
+                                }} money={false} />
                         </div>
                         )}
                         
                         {/* Revenue Trend Chart */}
-                        <div className="flex flex-col gap-[5px] shadow-md p-[15px] rounded-md bg-[#E0E0E6] min-h-[500px]">
-                            <span className="font-semibold">Revenue Over Time</span>
+                        <div className="flex flex-col gap-[5px] shadow-md p-[10px] md:p-[15px] rounded-md bg-[#E0E0E6]  min-h-[375px] md:min-h-[500px]">
+                            <span className="font-semibold ">Revenue Over Time</span>
                             <div className="flex-1 min-h-0">
                                 {revenueOverTime?.labels?.length > 0 && (
                                     <LineGraph key={`line-${chartKey}`} data={revenueOverTime} />
@@ -235,23 +232,9 @@ function Home(){
                         </div>
                         
                         {/* Bottom Charts - Side by Side */}
-                        <div className="flex gap-[15px] min-h-[400px]">
-                            <div className="flex flex-col gap-[5px] flex-1 p-[15px] rounded-md bg-[#E0E0E6] min-h-0">
-                                <span className="font-semibold">Revenue & Orders by Year</span>
-                                <div className="flex-1 min-h-0">
-                                    {revenueGrowthByYear?.labels?.length > 0 && (
-                                        <BarGraph key={`bar1-${chartKey}`} data={revenueGrowthByYear} />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-[5px] flex-1 p-[15px] rounded-md bg-[#E0E0E6] min-h-0">
-                                <span className="font-semibold">Growth Trend</span>
-                                <div className="flex-1 min-h-0">
-                                    {revenueGrowth?.labels?.length > 0 && (
-                                        <BarGraph key={`bar2-${chartKey}`} data={revenueGrowth} />
-                                    )}
-                                </div>
-                            </div>
+                        <div className="flex flex-col md:flex-row gap-[15px] min-h-[400px]">
+                            <GraphFormat title={"Revenue & Orders by Year"} data={revenueGrowthByYear} graph={<BarGraph key={`bar1-${chartKey}`} data={revenueGrowthByYear} />} />
+                            <GraphFormat title={"Growth Trend"} data={revenueGrowth} graph={<BarGraph key={`bar2-${chartKey}`} data={revenueGrowth} />} />
                         </div>
                     </div>
                 </div>

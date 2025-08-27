@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/trend.png"
-import { PanelLeftOpen, House, Package, Truck, ClipboardList, Users, ChartArea, PanelLeftClose } from "lucide-react";
+import { PanelLeftOpen, House, Warehouse, Package, Truck, ClipboardList, Users, ChartArea, PanelLeftClose } from "lucide-react";
 
 function Sidebar(props){
     return (
@@ -20,6 +20,10 @@ function Sidebar(props){
                         </li>
                         <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
                             <Package size={20} />
+                            <span className={`${props.isOpen ? "block" : "hidden"}`}>Orders</span>
+                        </li>
+                        <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                            <Warehouse size={20} />
                             <span className={`${props.isOpen ? "block" : "hidden"}`}>Inventory</span>
                         </li>
                         <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
