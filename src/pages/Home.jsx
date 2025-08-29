@@ -45,7 +45,7 @@ function Home(){
                 
             } catch (error){
                 console.log(error.message)
-                throw Error(error)
+                throw error
             }
         }
         
@@ -76,7 +76,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw Error(error)
+                throw error
             }
         }
 
@@ -107,7 +107,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw Error(error)
+                throw error
             }
         }
         const fetchGrowthByYear = async () =>{
@@ -137,7 +137,7 @@ function Home(){
 
             } catch (error){
                 console.log(error.message)
-                throw Error(error)
+                throw error
             }
         }
 

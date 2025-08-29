@@ -1,6 +1,7 @@
 import React from "react";
-import logo from "../assets/trend.png"
+import logo from "../assets/logo.jpg"
 import { PanelLeftOpen, House, Warehouse, Package, Truck, ClipboardList, Users, ChartArea, PanelLeftClose } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function Sidebar(props){
     return (
@@ -14,34 +15,44 @@ function Sidebar(props){
                 <hr className="m-[15px]" />
                 <div>
                     <ul className="flex flex-col gap-[20px] p-[10px] text-[18px]">
+                        <Link to="/">
+                            <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                                
+                                    <House size={20} />
+                                    <span className={`${props.isOpen ? "block" : "hidden"}`}>Home</span>
+                            </li>
+                        </Link>
                         <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            <House size={20} />
-                            <span className={`${props.isOpen ? "block" : "hidden"}`}>Home</span>
-                        </li>
-                        <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                            {/* work on after e-commerce */}
                             <Package size={20} />
                             <span className={`${props.isOpen ? "block" : "hidden"}`}>Orders</span>
                         </li>
+                        <Link to="/inventory">
+                            <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                                    <Warehouse size={20} />
+                                    <span className={`${props.isOpen ? "block" : "hidden"}`}>Inventory</span>
+                            </li>
+                        </Link>
+                        <Link to="/supplier">
+                            <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                                <Truck size={20} />
+                                <span className={`${props.isOpen ? "block" : "hidden"}`}>Suppliers</span>
+                            </li>
+                        </Link>
+                        <Link to="/report">
+                            <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
+                                {/* work on after inventory and suppliers */}
+                                <ClipboardList size={20} />
+                                <span className={`${props.isOpen ? "block" : "hidden"}`}>Reports</span>
+                            </li>
+                        </Link>
                         <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            <Warehouse size={20} />
-                            <span className={`${props.isOpen ? "block" : "hidden"}`}>Inventory</span>
-                        </li>
-                        <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            <Truck size={20} />
-                            <span className={`${props.isOpen ? "block" : "hidden"}`}>Suppliers</span>
-                        </li>
-                        <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            {/* work on last */}
-                            <ClipboardList size={20} />
-                            <span className={`${props.isOpen ? "block" : "hidden"}`}>Reports</span>
-                        </li>
-                        <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            {/* work on last */}
+                            {/* work on after e-commerce website */}
                             <Users size={20} />
                             <span className={`${props.isOpen ? "block" : "hidden"}`}>Customers</span>
                         </li>
                         <li className={`flex gap-[30px] items-center ${props.isOpen ? "" : "justify-center"} p-[10px] rounded-md hover:bg-gray-200/80 hover:text-black`}>
-                            {/* work on last */}
+                            {/* work on after learning ml */}
                             <ChartArea size={20} />
                             <span className={`${props.isOpen ? "block" : "hidden"}`}>Analysis</span>
                         </li>
