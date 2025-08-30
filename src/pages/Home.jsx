@@ -8,6 +8,7 @@ import Footer from "../components/Footer.jsx";
 import MobileSideBar from "../components/MobileSideBar.jsx";
 import StatCard from "../components/StatCard.jsx";
 import { Banknote, Package2, ShoppingCart, TriangleAlert } from "lucide-react";
+import Loader from "../components/Loader.jsx";
 import GraphFormat from "../components/GraphFormat.jsx";
 
 function Home(){
@@ -161,12 +162,6 @@ function Home(){
         return () => window.removeEventListener("resize", handleResize)
     }, [])
 
-    console.log('Render state:', { loading, error, statData, revenueOverTime, revenueGrowth, revenueGrowthByYear });
-    console.log(statData)
-    if (loading) {
-        console.log('Showing loading state');
-        return <div className="p-4">Loading...</div>;
-    }
     
     if (error) {
         console.log('Showing error state:', error);
@@ -174,6 +169,7 @@ function Home(){
     }
     return (
         <>
+            {loading ? <Loader /> : (
             <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen"
             style={isDesktop ? {
                         gridTemplateColumns: isOpen ? "250px 1fr" : "70px 1fr",
@@ -242,6 +238,7 @@ function Home(){
                     <Footer />
                 </div>
             </div>
+            )}
         </>
     );
 }
