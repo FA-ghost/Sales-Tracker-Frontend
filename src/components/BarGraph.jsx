@@ -20,14 +20,14 @@ function BarGraph ({data}){
       scales:{
         x:{
           grid:{
-            color:"rgba(229,231,235,0.4)"
+            color:"rgba(224, 228, 236, 0.1)"
           }
         },
         y:{
           beginAtZero: true,
           grid:{
             display:false,
-            color:"rgba(229,231,235,0.4)"
+            color:"rgba(224, 228, 236, 0.1)"
           }
         }
       },

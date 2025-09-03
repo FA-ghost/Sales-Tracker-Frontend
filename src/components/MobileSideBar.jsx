@@ -8,7 +8,7 @@ function MobileSideBar (){
         {!isOpen && (
                 <button 
                 onClick={() => setIsOpen(true)} 
-                className="p-[5px] bg-[#B2B0E8] rounded-sm z-50 relative text-white"
+                className="p-[5px] bg-[#2D46A0] rounded-sm z-50 relative text-white"
                 >
                 <Menu size={30} />
                 </button>

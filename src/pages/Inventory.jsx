@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar.jsx";
 import Footer from "../components/Footer.jsx";
 import MobileSideBar from "../components/MobileSideBar.jsx";
 import Loader from "../components/Loader.jsx";
+import Table from "../components/Table.jsx";
 
 function Inventory (){
     const [isOpen, setIsOpen] = useState(true);
@@ -57,7 +58,7 @@ function Inventory (){
                             <MobileSideBar isOpen={isOpen} />
                         </div>
                         ) }
-                    <div>
+                    <div className="w-full">
                         <Navbar />
                     </div>
                     
@@ -67,9 +68,11 @@ function Inventory (){
                      <Sidebar update={updateIsOpen} isOpen={isOpen} />
                 </div>)
                 }
-                <div className=" col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden">
-                    
-                        <h1>Inventory</h1>
+                <div className="col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden">
+                    <div className="flex flex-col gap-[20px]">
+                        <h2 className="text-[18px] font-medium">Top Categories</h2>
+                        <Table />
+                    </div>
                 </div>
                 <div className="col-start-1 col-span-full row-start-3">
                     <Footer />

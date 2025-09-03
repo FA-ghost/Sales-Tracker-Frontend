@@ -63,13 +63,13 @@ function Home(){
                 datasets: [{
                     label: data.sales.label,
                     data: data.sales.data,
-                    backgroundColor: "rgba(141,110,235,0.8)",
+                    backgroundColor: "rgba(155, 93, 229, 1)",
                     fill: true
                 },
                 {
                     label: data.revenue.label,
                     data: data.revenue.data,
-                    backgroundColor: "rgba(200, 162, 200,0.8)",
+                    backgroundColor: "rgba(74, 108, 247, 1)",
                     fill:true 
                 }]
             }
@@ -93,13 +93,13 @@ function Home(){
                     datasets: [{
                         label: data.sales.label,
                         data: data.sales.data,
-                        backgroundColor: "rgba(141,110,235,0.8)",
+                        backgroundColor: "rgba(155, 93, 229, 1)",
                         fill: true
                     },
                     {
                         label: data.revenue.label,
                         data: data.revenue.data,
-                        backgroundColor: "rgba(200, 162, 200,0.8)",
+                        backgroundColor: "rgba(74, 108, 247, 1)",
                         fill:true 
                     }]
                 }
@@ -123,13 +123,13 @@ function Home(){
                     datasets: [{
                         label: data.sales.label,
                         data: data.sales.data,
-                        backgroundColor: "rgba(141,110,235,0.8)",
+                        backgroundColor: "rgba(155, 93, 229, 1)",
                         fill: true
                     },
                     {
                         label: data.revenue.label,
                         data: data.revenue.data,
-                        backgroundColor: "rgba(200, 162, 200,0.8)",
+                        backgroundColor: "rgba(74, 108, 247, 1)",
                         fill:true 
                     }]
                 }
@@ -183,7 +183,7 @@ function Home(){
                             <MobileSideBar isOpen={isOpen} />
                         </div>
                         ) }
-                    <div>
+                    <div className="w-full">
                         <Navbar />
                     </div>
                     
@@ -218,7 +218,7 @@ function Home(){
                         )}
                         
                         {/* Revenue Trend Chart */}
-                        <div className="flex flex-col gap-[5px] shadow-md p-[10px] md:p-[15px] rounded-md bg-[#E0E0E6]  min-h-[375px] md:min-h-[500px]">
+                        <div className="flex flex-col gap-[5px] shadow-md p-[10px] md:p-[15px] rounded-md bg-[#F5F6FA]  min-h-[375px] md:min-h-[500px]">
                             <span className="font-semibold ">Revenue Over Time</span>
                             <div className="flex-1 min-h-0">
                                 {revenueOverTime?.labels?.length > 0 && (

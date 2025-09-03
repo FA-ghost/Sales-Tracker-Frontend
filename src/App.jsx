@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import Inventory from "./pages/Inventory.jsx";
 import Suppliers from "./pages/Suppliers.jsx";
 import Reports from "./pages/Reports.jsx";
+import InventoryLayout from "./pages/InventoryLayout.jsx";
 
 function App() {
   
@@ -13,7 +14,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/inventory" element={<InventoryLayout />}>
+            <Route index element={<Inventory />} />
+          </Route>
           <Route path="/report" element={<Reports />} />
           <Route path="/supplier" element={<Suppliers />} />
         </Routes>
