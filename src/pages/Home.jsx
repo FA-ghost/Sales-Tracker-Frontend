@@ -7,7 +7,7 @@ import LineGraph from "../components/LineGraph.jsx";
 import Footer from "../components/Footer.jsx";
 import MobileSideBar from "../components/MobileSideBar.jsx";
 import StatCard from "../components/StatCard.jsx";
-import { Banknote, Package2, ShoppingCart, TriangleAlert } from "lucide-react";
+import { Banknote, Package2, ShoppingCart, TriangleAlert, PackageOpen } from "lucide-react";
 import Loader from "../components/Loader.jsx";
 import GraphFormat from "../components/GraphFormat.jsx";
 
@@ -197,16 +197,21 @@ function Home(){
                     <div className="flex flex-col gap-[15px] h-full">
                         {/* Stats Cards */}
                         {statData && (
-                            <div className="flex flex-col md:flex-row justify-between text-white gap-[15px]">
+                            <div className="flex flex-col lg:flex-row justify-between text-white gap-[15px]">
                                 <StatCard title={"Total revenue"} icon={<Banknote size={30} />} color={"bg-[#6366F1]"} data={{
                                     data1: statData.currRev,
                                     data2: statData.growthAgainstLastRev
                                 }} money={true} />
-                                <StatCard title={"Total Orders"} icon={<ShoppingCart size={30} />} color={"bg-[#8B5CF6]"} data={{
+                                <StatCard title={"Total Sales"} icon={<ShoppingCart size={30} />} color={"bg-[#8B5CF6]"} data={{
                                     data1: statData.currSal,
                                     data2: statData.growthAgainstLastSal
-                                }} money={true} />
+                                }} money={false} />
                                 
+                                {/* to be updated when e-commerce website is done */}
+                                <StatCard title={"Total Orders"} icon={<PackageOpen size={30} />} color={"bg-[#4A6CF1]"} data={{
+                                    data1: statData.productCount,
+                                }} money={false} />
+
                                 <StatCard title={"Total Products"} icon={<Package2 size={30} />} color={"bg-[#06B6D4]"} data={{
                                     data1: statData.productCount,
                                 }} money={false} />
