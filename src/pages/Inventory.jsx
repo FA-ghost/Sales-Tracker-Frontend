@@ -5,12 +5,17 @@ import Footer from "../components/Footer.jsx";
 import MobileSideBar from "../components/MobileSideBar.jsx";
 import Loader from "../components/Loader.jsx";
 import Table from "../components/Table.jsx";
+import { PlusCircle, X } from "lucide-react";
+
 
 function Inventory (){
     const [isOpen, setIsOpen] = useState(true);
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+    const [categoryName, setCategoryName] = useState('')
+    const [searchCategory, setSearchCategory] = useState('')
 
     const updateIsOpen = () => {
         setIsOpen(!isOpen);
@@ -45,7 +50,7 @@ function Inventory (){
     return (
         <>
         {loading ? <Loader /> : (
-        <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen"
+        <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen relative"
             style={isDesktop ? {
                         gridTemplateColumns: isOpen ? "250px 1fr" : "70px 1fr",
                     } : {
@@ -68,10 +73,46 @@ function Inventory (){
                      <Sidebar update={updateIsOpen} isOpen={isOpen} />
                 </div>)
                 }
-                <div className="col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden">
+
+                {isAddFormOpen && (
+                    <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
+                        <form action="" className={`flex flex-col gap-[20px] w-[30%] bg-[#F5F6FA] shadow-md p-[15px] rounded-md transition-transform duration-300 ease-in-out ${isAddFormOpen ? "translate-y-0" : "-translate-y-full" }`}>
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-[18px]">Add Category</h2>
+                                <button className="p-[5px] rounded-sm hover:bg-gray-300 hover:text-white" onClick={() => {
+                                    setIsAddFormOpen(false)
+                                    setCategoryName("")
+                                }}>
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            <div className="flex flex-col">
+                                <input type="text" className="bg-white h-[40px] p-[10px] mb-[10px] rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400" placeholder="Add a category..." value={categoryName} onChange={(e) =>{
+                                    setCategoryName(e.target.value)
+                                }} />
+                                {/* functionality to be worked on */}
+                                <button type="submit" className="bg-[#4A6CF7] text-white p-[5px] rounded-md hover:bg-[#3B38A0]">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+                <div className="col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden flex flex-col gap-[40px]">
                     <div className="flex flex-col gap-[20px]">
                         <h2 className="text-[18px] font-medium">Top Categories</h2>
                         <Table />
+                    </div>
+                    <div className="flex flex-col gap-[20px]">
+                        <div className="flex flex-col md:flex-row justify-between">
+                            <h3 className="text-[16px] font-medium">Categories</h3>
+                            <div className="flex gap-[15px] items-center">
+                                <input type="text" placeholder="Search Category" onChange={(e) => setSearchCategory(e.target.value)} value={searchCategory} className="w-[80%] bg-white h-[45px] p-[10px] mb-[10px] shadow-md rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400" />
+                                <button className="w-[20%] min-w-[85px] flex gap-[15px] items-center bg-[#4A6CF7] text-white p-[10px] rounded-md hover:bg-[#3B38A0] hover:shadow-md" onClick={() => setIsAddFormOpen(true)}>
+                                    <span>Add</span>
+                                    <PlusCircle size={20} />
+                                </button>
+                            </div>
+                        </div>
+                        <Table mainData={true} />
                     </div>
                 </div>
                 <div className="col-start-1 col-span-full row-start-3">
