@@ -7,15 +7,34 @@ import Loader from "../components/Loader.jsx";
 import Table from "../components/Table.jsx";
 import { PlusCircle, X } from "lucide-react";
 
+const tableHeading = {
+    heading1: ["Name", "Total Products", "Total Sales (Last Month)", "Total Revenue (Last Month)"],
+    heading2: ["Name", "Total Products", "Total Sales (This Month)", "Total Revenue (This Month)"],
+}
+
 
 function Inventory (){
     const [isOpen, setIsOpen] = useState(true);
-    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+    
+    // to add a category name
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
     const [categoryName, setCategoryName] = useState('')
+    
+    //to update category name
+    const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
+    const [categoryToUpdateId, setCategoryToUpdateId] = useState('')
+    const [updateCategoryName, setUpdateCategoryName] = useState('')
+
+    //To perform search query
     const [searchCategory, setSearchCategory] = useState('')
+
+    // for getting data
+    const [topCategories, setTopCategories] = useState()
+    const [allCategories, setAllCategories] = useState()
+
 
     const updateIsOpen = () => {
         setIsOpen(!isOpen);
@@ -25,11 +44,57 @@ function Inventory (){
     useEffect(() => {
         const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
         window.addEventListener("resize", handleResize)
+
+        const fetchTopCategory = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerInventory/topCategory")
+
+                if (!response.ok){
+                    throw Error("Error getting data")
+                }
+                const data = await response.json()
+                setTopCategories(data)
+                
+
+            } catch (error){
+                setError(error.message)
+            }
+        }
+
+        const fetchAllCategory = async () =>{
+            try{
+                const response = await fetch("/api/v1/managerInventory/allCategory")
+
+                if (!response.ok){
+                    throw Error("Error getting data")
+                }
+                const data = await response.json()
+                setAllCategories(data)
+                
+
+            } catch (error){
+                setError(error.message)
+            }
+        }
+        const updateCategory = async () =>{
+            try{
+                console.log(categoryToUpdateId)
+                console.log(updateCategoryName)            
+
+            } catch (error){
+                setError(error.message)
+            }
+        }
         
 
         const fetchAllData = async () => {
             try {
                 setLoading(true);
+                await Promise.all([
+                    fetchTopCategory(),
+                    fetchAllCategory(),
+                    updateCategory(),
+                ])
                 
             } catch (err) {
                 setError(err.message);
@@ -40,9 +105,9 @@ function Inventory (){
     
         fetchAllData();
         return () => window.removeEventListener("resize", handleResize)
-    }, [])
+        //remove dependencies so that the rendering issue does away
+    }, [updateCategoryName, categoryToUpdateId])
 
-    
     if (error) {
         console.log('Showing error state:', error);
         return <div className="p-4 text-red-500">Error: {error}</div>;
@@ -99,7 +164,7 @@ function Inventory (){
                 <div className="col-start-1 lg:col-start-2 row-start-2 p-[10px] overflow-hidden flex flex-col gap-[40px]">
                     <div className="flex flex-col gap-[20px]">
                         <h2 className="text-[18px] font-medium">Top Categories</h2>
-                        <Table />
+                        <Table mainData={false} heading={tableHeading.heading1} categoryData={topCategories} parent={"inventory"} />
                     </div>
                     <div className="flex flex-col gap-[20px]">
                         <div className="flex flex-col md:flex-row justify-between">
@@ -112,7 +177,30 @@ function Inventory (){
                                 </button>
                             </div>
                         </div>
-                        <Table mainData={true} />
+
+                        {isUpdateFormOpen && (
+                            <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
+                                <form action="" className={`flex flex-col gap-[20px] w-[30%] bg-[#F5F6FA] shadow-md p-[15px] rounded-md transition-transform duration-300 ease-in-out ${isAddFormOpen ? "translate-y-0" : "-translate-y-full" }`}>
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-[18px]">Update Category</h2>
+                                        <button className="p-[5px] rounded-sm hover:bg-gray-300 hover:text-white" onClick={() => {
+                                            setIsUpdateFormOpen(false)
+                                            setUpdateCategoryName("")
+                                        }}>
+                                            <X size={20} />
+                                        </button>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <input type="text" className="bg-white h-[40px] p-[10px] mb-[10px] rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400" placeholder="Add a category..." value={updateCategoryName} onChange={(e) =>{
+                                            setUpdateCategoryName(e.target.value)
+                                        }} />
+                                        {/* functionality to be worked on */}
+                                        <button type="submit" className="bg-[#4A6CF7] text-white p-[5px] rounded-md hover:bg-[#3B38A0]">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
+                        <Table mainData={true} heading={tableHeading.heading2} categoryData={allCategories} parent={"inventory"} getId={setCategoryToUpdateId} getCurrentData={setUpdateCategoryName} formOpen={setIsUpdateFormOpen} />
                     </div>
                 </div>
                 <div className="col-start-1 col-span-full row-start-3">
