@@ -30,11 +30,15 @@ function Table(props){
                                     {props.mainData && (
                                         <td scope="row" className="px-6 py-4 text-[#1E1E1EBF] flex gap-[10px]">
                                             <button className="hover:underline hover:underline-offset-2 text-blue-400 hover:cursor-pointer" onClick={() => {
-                                                props.getId(category.categoryId)
-                                                props.getCurrentData(category.categoryName)
-                                                props.formOpen(true)
+                                                props.getIdToUpdate(category.categoryId)
+                                                props.getCurrentDataToUpdate(category.categoryName)
+                                                props.updateFormOpen(true)
                                             }}>Edit</button>
-                                            <button className="hover:underline hover:underline-offset-2 text-red-400 hover:cursor-pointer">Delete</button>
+                                            <button className="hover:underline hover:underline-offset-2 text-red-400 hover:cursor-pointer" onClick={() =>{
+                                                props.getIdToDelete(category.categoryId)
+                                                props.getCurrentDataToDelete(category.categoryName)
+                                                props.deleteFormOpen(true)
+                                            }}>Delete</button>
                                         </td>)}
                                 </tr> 
                             )

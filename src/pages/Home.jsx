@@ -10,6 +10,7 @@ import StatCard from "../components/StatCard.jsx";
 import { Banknote, Package2, ShoppingCart, TriangleAlert, PackageOpen } from "lucide-react";
 import Loader from "../components/Loader.jsx";
 import GraphFormat from "../components/GraphFormat.jsx";
+import Toast from "../components/Toast.jsx";
 
 function Home(){
     const [isOpen, setIsOpen] = useState(true);
@@ -19,7 +20,7 @@ function Home(){
     const [revenueGrowthByYear, setRevenueGrowthByYear] = useState(null);
     const [chartKey, setChartKey] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [toast, setToast] = useState({message: "", type: "info"});
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
     const updateIsOpen = () => {
@@ -152,7 +153,7 @@ function Home(){
                     fetchGrowthByYear()
                 ]);
             } catch (err) {
-                setError(err.message);
+                setToast({message:err.message, type: "error"});
             } finally {
                 setLoading(false);
             }
@@ -162,14 +163,15 @@ function Home(){
         return () => window.removeEventListener("resize", handleResize)
     }, [])
 
-    
-    if (error) {
-        console.log('Showing error state:', error);
-        return <div className="p-4 text-red-500">Error: {error}</div>;
-    }
     return (
         <>
             {loading ? <Loader /> : (
+            <>
+            <Toast
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ message: '', type: 'info' })}
+            />
             <div className="grid grid-rows-[75px_1fr_auto] gap-y-[0px] gap-x-[15px] transition-[grid-template-columns] duration-300 ease-in-out min-h-screen"
             style={isDesktop ? {
                         gridTemplateColumns: isOpen ? "250px 1fr" : "70px 1fr",
@@ -243,6 +245,7 @@ function Home(){
                     <Footer />
                 </div>
             </div>
+            </>
             )}
         </>
     );

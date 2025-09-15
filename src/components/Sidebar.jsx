@@ -8,7 +8,7 @@ function Sidebar(props){
 
     return (
         <>
-            <aside className="flex flex-col gap-[5px] bg-[#4A6CF7] h-full text-white">
+            <aside className="fixed flex flex-col gap-[5px] bg-[#4A6CF7] h-full text-white">
                 <div className={`flex ${props.isOpen ? "flex-row gap-[10px]" : "flex-col gap-[20px]"} items-center p-[15px]`}>
                     <img src={logo} alt="logo" className="w-[40px] h-[40px] rounded-full" />
                     <span className={`font-bold text-[20px] bg-linear-to-r from-[#E0E0E6CC] to-[#EF83F5CC] bg-clip-text text-transparent ${props.isOpen ? "block" : "hidden"}`}>SalesTracker</span>
