@@ -44,7 +44,6 @@ function Inventory (){
     //for toaster
     const [toast, setToast] = useState({message: "", type: "info"})
 
-
     const updateIsOpen = () => {
         setIsOpen(!isOpen);
     };
@@ -192,28 +191,68 @@ function Inventory (){
         }
     }
 
-    useEffect(() => {
-        const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
-        window.addEventListener("resize", handleResize)
+    const handleSearch = async (query) =>{
         
-        const fetchAllData = async () => {
-            try {
-                setLoading(true);
-                await Promise.all([
-                    fetchTopCategory(),
-                    fetchAllCategory(),
-                ])
-                
-            } catch (err) {
-                setToast({message:err.message, type: "error"})
-            } finally {
-                setLoading(false);
+        if (searchCategory === "") {
+            await fetchAllCategory()
+            return;
+        }
+
+        try{
+            const response = await fetch(`/api/v1/managerInventory/searchCategory?search=${query}`, {
+                method:"GET",
+            })
+
+            const data = await response.json()
+
+            if (response.ok){
+                setAllCategories(data)
+            }else{
+                setToast({ message: data.error || data.message || "Update failed", type: 'error' });
+                await fetchAllCategory()
             }
-        };
-    
-        fetchAllData();
-        return () => window.removeEventListener("resize", handleResize)
-    }, [])
+
+        } catch (error){
+            setToast({message:error.message, type: "error"})
+        }
+    }
+
+    // mount effect
+    useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+    window.addEventListener("resize", handleResize);
+
+    const fetchAllData = async () => {
+        try {
+        setLoading(true);
+        await Promise.all([fetchTopCategory(), fetchAllCategory()]);
+        } catch (err) {
+        setToast({ message: err.message, type: "error" });
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    fetchAllData();
+
+    return () => {
+        window.removeEventListener("resize", handleResize);
+    };
+    }, []);
+
+    // debounced search effect
+    useEffect(() => {
+        if (!searchCategory.trim()) {
+            fetchAllCategory();
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            handleSearch(searchCategory);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [searchCategory]);
 
     return (
         <>
