@@ -50,7 +50,7 @@ function Inventory (){
 
     const fetchTopCategory = async () =>{
             try{
-                const response = await fetch("/api/v1/managerInventory/topCategory")
+                const response = await fetch("/api/v1/managerInventoryCategory/topCategory")
 
                 if (!response.ok){
                     throw Error("Error getting data")
@@ -66,7 +66,7 @@ function Inventory (){
 
     const fetchAllCategory = async () =>{
         try{
-            const response = await fetch("/api/v1/managerInventory/allCategory")
+            const response = await fetch("/api/v1/managerInventoryCategory/allCategory")
 
             if (!response.ok){
                 throw Error("Error getting data")
@@ -86,7 +86,7 @@ function Inventory (){
         try{
             setLoading(true)
             
-            const addResponse = await fetch(`/api/v1/managerInventory/newCategory`, {
+            const addResponse = await fetch(`/api/v1/managerInventoryCategory/newCategory`, {
                 method:"POST",
                 headers: {
                 "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function Inventory (){
         try{
             setLoading(true)
             
-            const updatesResponse = await fetch(`/api/v1/managerInventory/updateCategory/${categoryToUpdateId}`, {
+            const updatesResponse = await fetch(`/api/v1/managerInventoryCategory/updateCategory/${categoryToUpdateId}`, {
                 method:"PATCH",
                 headers: {
                 "Content-Type": "application/json",
@@ -168,7 +168,7 @@ function Inventory (){
         try{
             setLoading(true)
             
-            const updatesResponse = await fetch(`/api/v1/managerInventory/deleteCategory/${categoryToDeleteId}`, {
+            const updatesResponse = await fetch(`/api/v1/managerInventoryCategory/deleteCategory/${categoryToDeleteId}`, {
                 method:"DELETE",
             })
 
@@ -199,7 +199,7 @@ function Inventory (){
         }
 
         try{
-            const response = await fetch(`/api/v1/managerInventory/searchCategory?search=${query}`, {
+            const response = await fetch(`/api/v1/managerInventoryCategory/searchCategory?search=${query}`, {
                 method:"GET",
             })
 
