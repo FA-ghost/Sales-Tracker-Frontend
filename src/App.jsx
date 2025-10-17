@@ -8,6 +8,7 @@ import Reports from "./pages/Reports.jsx";
 import InventoryLayout from "./pages/InventoryLayout.jsx";
 import ProductInventory from "./pages/ProductInventory.jsx";
 import Product from "./pages/Product.jsx";
+import AppLayOut from "./pages/AppLayout.jsx";
 
 function App() {
   
@@ -15,15 +16,17 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/inventory" element={<InventoryLayout />}>
-            <Route index element={<Inventory />} />
-            <Route path=":id" element={<ProductInventory />}>
-              <Route path=":productId" element={<Product />} />
+          <Route element={<AppLayOut />}>
+            <Route index element={<Home />} />
+            <Route path="/inventory" element={<InventoryLayout />}>
+              <Route index element={<Inventory />} />
+              <Route path=":id" element={<ProductInventory />}>
+                <Route path=":productId" element={<Product />} />
+              </Route>
             </Route>
+            <Route path="/report" element={<Reports />} />
+            <Route path="/supplier" element={<Suppliers />} />
           </Route>
-          <Route path="/report" element={<Reports />} />
-          <Route path="/supplier" element={<Suppliers />} />
         </Routes>
       </BrowserRouter>
     </>

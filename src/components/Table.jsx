@@ -8,7 +8,7 @@ function Table(props){
         <>
             <div className="w-full rounded-md overflow-y-hidden overflow-x-scroll">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 table-auto">
-                    <thead className="text-xs titlecase mg:uppercase bg-[#4A6CF726] dark:bg-[#4A6CF726] dark:text-[#1E1E1EF11]">
+                    <thead className="text-xs titlecase md:uppercase bg-[#4A6CF726] dark:bg-[#4A6CF726] dark:text-[#1E1E1EF11]">
                         <tr className="">
                             {props.heading.map((heading, index) => <th key={index} scope="col" className="px-6 py-3">{heading}</th>)}
                             {props.mainData && <th scope="col" className="px-6 py-3">Action</th>}

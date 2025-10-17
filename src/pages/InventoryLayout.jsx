@@ -1,13 +1,10 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-
+import { Outlet, useOutletContext } from "react-router-dom";
 
 function InventoryLayout(){
+    const {setToast, setLoading} = useOutletContext()
     return (
-        <>
-            <Outlet />
-        </>
+        <Outlet context={{setToast, setLoading}} />
     )
 }
 
-export default InventoryLayout
+export default InventoryLayout;
